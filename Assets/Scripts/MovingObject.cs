@@ -5,20 +5,23 @@ using UnityEngine;
 public class MovingObject : MonoBehaviour
 {
     [SerializeField]
-    private float moveSpeed = 1;
+    public float moveSpeed = 1;
     [SerializeField]
-    private Vector3 bgReversePos;
+    private Vector3 bgReversePos = new Vector3(-50,0,0);
     public Vector3 positionChange = Vector3.left;
 
     private void LateUpdate()
     {
-        if(transform.position.x <= bgReversePos.x)
+        if(!GameManager.instance.gameOver)
         {
-            transform.position = Vector3.zero;
-        }
-        Move();
+            if (transform.position.x <= bgReversePos.x)
+            {
+                transform.position = Vector3.zero;
+            }
+            Move();
+        }   
     }
-    public virtual void Move()
+    public void Move()
     {
         transform.position += (positionChange * moveSpeed * Time.deltaTime);
     }

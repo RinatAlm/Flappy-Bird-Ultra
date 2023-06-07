@@ -15,14 +15,18 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (!GameManager.instance.gameOver)
         {
-            Fly();
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Fly();
+            }
         }
+        
     }
 
     private void Fly()
-    {
-        rigidbody2d.AddForce(Vector2.up * force,ForceMode2D.Impulse);
+    {      
+        rigidbody2d.AddForce(Vector2.up * force,ForceMode2D.Impulse);       
     }
 }
