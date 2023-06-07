@@ -828,7 +828,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.25
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -906,7 +906,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obstacleSpawnPos: {x: 15, y: 0, z: 0}
-  spawnOffset: 3
+  spawnOffset: 3.5
   spawnDelay: 1.5
   obstaclePrefab: {fileID: 4200484042944132427, guid: e4a48a89a3ec3d848b3d0779ffc2bce8, type: 3}
   background: {fileID: 1698367185}

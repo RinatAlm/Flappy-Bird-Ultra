@@ -29,8 +29,8 @@ public class GameManager : MonoBehaviour
     private Vector3 obstacleSpawnPos;
     [SerializeField]
     private float spawnOffset;
-    [SerializeField]
-    private float spawnDelay = 1;
+
+    public float spawnDelay = 1;
     public GameObject obstaclePrefab;
     public MovingObject background;
     public static GameManager instance;
@@ -43,21 +43,22 @@ public class GameManager : MonoBehaviour
     {
         instance = this;//Taking instance of GameManager for comfortable access
         level = Level.instance;
-        if(level!=null)
+        if (level != null)
         {
-            if (level.levelType.Equals(LevelType.EASY))//Check EASY
+            Debug.Log(level.levelType.ToString());
+            if (level.levelType == Level.LevelType.EASY)//Check EASY
             {
-                 difficulty = new Difficulty(3, 1.75f);
+                difficulty = new Difficulty(3, 1.75f);
             }
-            else if (level.levelType.Equals(LevelType.MEDIUM))
+            else if (level.levelType == Level.LevelType.MEDIUM)
             {
-                 difficulty = new Difficulty(4, 1.5f);
+                difficulty = new Difficulty(4, 1.5f);
             }
             else
             {
-                 difficulty = new Difficulty(5, 1.25f);
+                difficulty = new Difficulty(5, 1.25f);
             }
-        }       
+        }
         spawnDelay = difficulty.spawnDelay;
         background.moveSpeed = difficulty.moveSpeed;
     }
