@@ -6,27 +6,43 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private float force = 100f;
+    [SerializeField]
+    private AnimationClip animationClip;
     private Rigidbody2D rigidbody2d;
+    Animator animator;
+
+   
 
     private void Awake()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
+    }
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
         if (!GameManager.instance.gameOver)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+
+            if (Input.touchCount > 0)
             {
-                Fly();
+                Touch theTouch = Input.GetTouch(0);
+                if (theTouch.phase == TouchPhase.Began)
+                {
+                    Fly();
+                }
             }
         }
         
     }
 
     private void Fly()
-    {      
-        rigidbody2d.AddForce(Vector2.up * force,ForceMode2D.Impulse);       
+    {
+        animator.Play(animationClip.name);        
+        rigidbody2d.AddForce(Vector2.up * force, ForceMode2D.Impulse);
+        AudioManager.instance.Play("Jump");
     }
 }

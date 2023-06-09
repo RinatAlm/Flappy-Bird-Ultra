@@ -71,7 +71,6 @@ namespace AppsFlyerSDK
                 appsFlyerAndroid.initSDK(devKey, gameObject);
                 instance = appsFlyerAndroid;
                 instance.isInit = true;
-                
             }
 #elif UNITY_WSA_10_0
             AppsFlyerWindows.InitSDK(devKey, appID, gameObject);
@@ -98,6 +97,7 @@ namespace AppsFlyerSDK
             if (instance != null)
             {
                 instance.startSDK(onRequestResponse != null, CallBackObjectName);
+                
             }
 #endif
         }
@@ -559,7 +559,8 @@ namespace AppsFlyerSDK
             if (instance != null)
             {
                 instance.getConversionData(objectName);
-            }
+               
+            }           
 #endif
 
         }

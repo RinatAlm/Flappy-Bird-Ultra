@@ -2,57 +2,83 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using AppsFlyerSDK;
 using UnityEngine;
 
 public class IntroManager : MonoBehaviour
 {
-    private Level level;
+    public static IntroManager instance;
+    private Level level;   
     public GameObject rightButton;
     public GameObject leftButton;
     public GameObject settingsPanel;
+    public Text levelText;   
+    public GameObject bg;
+    public GameObject slider;
+    public AppsFlyerObjectScript objectScript;
+    private void Awake()
+    {
+        instance = this;
+        level = Level.instance;    
+    }
     private void Start()
     {
-        level = Level.instance;
+        Debug.Log(AudioManager.instance.name);
+        AudioManager.instance.LoadVolume();
+        slider.GetComponent<Slider>().value = AudioManager.instance.volume;
+        ChangeVolume();
+        if(AudioManager.instance.isMainMusicRunning == false)
+        AudioManager.instance.Play("MainMusic");     
         SwitchLevel();
+        bg.GetComponent<MovingObject>().moveSpeed = 0.5f;
     }
 
     public void ClickRight()//Incrementing difficulty
     {
-
         level.levelOffset++;
         SwitchLevel();
+        AudioManager.instance.Play("Button");
     }
     public void ClickLeft()//Decrementing difficulty
     {
         level.levelOffset--;
         SwitchLevel();
+        AudioManager.instance.Play("Button");
     }
 
     private void SwitchLevel()//Changing states of buttons
     {
+        
         switch (level.levelOffset)
         {
             case 0:
                 rightButton.SetActive(true);
                 leftButton.SetActive(false);
+                level.levelName = "EASY";
+                level.colorName = "green";
                 break;
             case 1:
                 leftButton.SetActive(true);
                 rightButton.SetActive(true);
+                level.levelName = "MEDIUM";
+                level.colorName = "yellow";
                 break;
             case 2:
                 leftButton.SetActive(true);
                 rightButton.SetActive(false);
+                level.levelName = "HARD";
+                level.colorName = "red";
                 break;
-        }
-        level.SetLevelType();
-
+        }       
+        level.LoadData();
+        levelText.text = " Level : " +"<color=" + level.colorName + ">" + level.levelName + "</color>" + "\n Max Score : " + level.score.ToString();
     }
 
     public void GameStart()
     {
-        
+        AudioManager.instance.SaveVolume();
         SceneManager.LoadScene("GameScene");
+        AudioManager.instance.Play("Button");
     }
 
     public void SettingsClick()
@@ -64,21 +90,17 @@ public class IntroManager : MonoBehaviour
         }
         else
         {
+            AudioManager.instance.SaveVolume();
             settingsPanel.SetActive(false);
         }
+        AudioManager.instance.LoadVolume();
     }
 
-    //private IEnumerator SettingsCoroutine()
-    //{
-    //    Animator animator = GetComponent<Animator>();
-
-    //    if (animator)
-    //    {
-    //       // animator.Play(clearAnimation.name);
-    //    }
-    //    yield return new WaitForSeconds(clearAnimation.length);
-    //    Destroy(gameObject);
-    //}
-
-    
+   
+    public void ChangeVolume()
+    {
+        AudioManager.instance.volume = slider.GetComponent<Slider>().value;
+        AudioManager.instance.SetAudio();
+        //AudioManager.instance.SaveVolume();
+    }
 }

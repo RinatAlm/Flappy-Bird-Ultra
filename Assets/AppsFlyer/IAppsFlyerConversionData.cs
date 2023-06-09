@@ -28,4 +28,6 @@ namespace AppsFlyerSDK
         /// <param name="error">A string describing the error.</param>
         void onAppOpenAttributionFailure(string error);
     }
+
+
 }

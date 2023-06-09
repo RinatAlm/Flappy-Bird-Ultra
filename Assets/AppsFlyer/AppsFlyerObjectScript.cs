@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using AppsFlyerSDK;
 
 // This class is intended to be used the the AppsFlyerObject.prefab
 
 public class AppsFlyerObjectScript : MonoBehaviour , IAppsFlyerConversionData
 {
-
+    
     // These fields are set from the editor so do not modify!
     //******************************//
     public string devKey;
@@ -17,7 +18,6 @@ public class AppsFlyerObjectScript : MonoBehaviour , IAppsFlyerConversionData
     public bool isDebug;
     public bool getConversionData;
     //******************************//
-
 
     void Start()
     {
@@ -32,7 +32,6 @@ public class AppsFlyerObjectScript : MonoBehaviour , IAppsFlyerConversionData
         AppsFlyer.initSDK(devKey, appID, getConversionData ? this : null);
 #endif
         //******************************/
- 
         AppsFlyer.startSDK();
     }
 
@@ -48,11 +47,13 @@ public class AppsFlyerObjectScript : MonoBehaviour , IAppsFlyerConversionData
         AppsFlyer.AFLog("didReceiveConversionData", conversionData);
         Dictionary<string, object> conversionDataDictionary = AppsFlyer.CallbackStringToDictionary(conversionData);
         // add deferred deeplink logic here
+        Debug.Log("Hello");
     }
 
     public void onConversionDataFail(string error)
     {
         AppsFlyer.AFLog("didReceiveConversionDataWithError", error);
+        Debug.Log("Hello");
     }
 
     public void onAppOpenAttribution(string attributionData)
@@ -60,11 +61,14 @@ public class AppsFlyerObjectScript : MonoBehaviour , IAppsFlyerConversionData
         AppsFlyer.AFLog("onAppOpenAttribution", attributionData);
         Dictionary<string, object> attributionDataDictionary = AppsFlyer.CallbackStringToDictionary(attributionData);
         // add direct deeplink logic here
+        Debug.Log("Hello");
     }
 
     public void onAppOpenAttributionFailure(string error)
     {
         AppsFlyer.AFLog("onAppOpenAttributionFailure", error);
+        Debug.Log("Hello");
+        Debug.Log("Hello");
     }
 
 }

@@ -553,8 +553,10 @@ namespace AppsFlyerSDK
         /// </summary>
         public void getConversionData(string objectName)
         {
+            
 #if !UNITY_EDITOR
-            appsFlyerAndroid.CallStatic("getConversionData", objectName);
+            appsFlyerAndroid.CallStatic("getConversionData", objectName);    
+            
 #endif
         }
 

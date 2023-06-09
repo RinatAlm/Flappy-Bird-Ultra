@@ -10,7 +10,8 @@ public class ConfirmZone : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             GameManager.instance.score++;
-            GameManager.instance.scoreText.text = "Score : " + GameManager.instance.score.ToString();
+            GameManager.instance.scoreText.text = GameManager.instance.score.ToString();
+            AudioManager.instance.Play("Confirm");
         }
     }
        

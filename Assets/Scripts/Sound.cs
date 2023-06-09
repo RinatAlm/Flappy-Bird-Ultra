@@ -8,10 +8,10 @@ public class Sound
     public bool isMusic;
     public string name;
 
-    public bool loop;
+    [Range(0,1)]
+    public float origVolume = 1;
 
-    [Range(0f, 1f)]
-    public float volume;
+    public bool loop;
 
     [HideInInspector]
     public AudioSource source;

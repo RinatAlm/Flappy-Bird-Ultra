@@ -2,17 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.IO;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
-{
-    public enum LevelType
-    {
-        EASY,
-        MEDIUM,
-        HARD
-    };
-
+{  
     public struct Difficulty
     {
         public Difficulty(float moveSpeed,float spawnDelay)
@@ -23,6 +17,8 @@ public class GameManager : MonoBehaviour
         public float moveSpeed;
         public float spawnDelay;
     }
+
+
     Difficulty difficulty = new Difficulty(4,1.5f);
     private Level level;
     [SerializeField]
@@ -32,27 +28,30 @@ public class GameManager : MonoBehaviour
 
     public float spawnDelay = 1;
     public GameObject obstaclePrefab;
+    public GameObject BG;
     public MovingObject background;
     public static GameManager instance;
     public bool gameOver = false;
     public int score;
     public Text scoreText;
+    public GameObject gameMenu;
+    public Text levelData_Text;
 
+    
 
     private void Awake()
     {
         instance = this;//Taking instance of GameManager for comfortable access
         level = Level.instance;
         if (level != null)
-        {
-            Debug.Log(level.levelType.ToString());
-            if (level.levelType == Level.LevelType.EASY)//Check EASY
+        {           
+            if (level.levelOffset == 0)//Check EASY
             {
-                difficulty = new Difficulty(3, 1.75f);
+                difficulty = new Difficulty(3, 3f);
             }
-            else if (level.levelType == Level.LevelType.MEDIUM)
+            else if (level.levelOffset == 1)
             {
-                difficulty = new Difficulty(4, 1.5f);
+                difficulty = new Difficulty(4, 2f);
             }
             else
             {
@@ -60,23 +59,29 @@ public class GameManager : MonoBehaviour
             }
         }
         spawnDelay = difficulty.spawnDelay;
-        background.moveSpeed = difficulty.moveSpeed;
+        background.moveSpeed = difficulty.moveSpeed/2;
     }
 
     private void Start()
-    {       
+    {
+        gameMenu.SetActive(false);
+        level.LoadData();
         StartCoroutine(SpawnCoroutine());
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.LeftShift)) 
-        SceneManager.LoadScene("GameScene");
-    }
+  
     public void GameOver()//Game over Event
     {
         gameOver = true;
-        Debug.Log("GameOver");
+        if(level.score<score)
+        {
+            Debug.Log("Saved" + level.score.ToString() + " is less" + score.ToString());
+            level.score = score;
+            level.SaveData();
+        }
+        level.LoadData();
+        BG.GetComponent<MovingObject>().enabled = false;
+        gameMenu.SetActive(true);
+        levelData_Text.text = "Level type : " + "<color=" + level.colorName + ">" + level.levelName + "</color>" + "\n Record : " + level.score.ToString();
     }
 
     private Vector3 CalculateSpawnPos()
@@ -89,7 +94,7 @@ public class GameManager : MonoBehaviour
     {
         while(!gameOver)
         {
-            yield return new WaitForSeconds(Random.Range(spawnDelay,spawnDelay+1));
+            yield return new WaitForSeconds(Random.Range(spawnDelay,spawnDelay+0.5f));
             SpawnObstacle();
         }
     }
@@ -100,5 +105,21 @@ public class GameManager : MonoBehaviour
         //Level Check
         obstacle.GetComponent<MovingObject>().moveSpeed = difficulty.moveSpeed;
         
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("GameScene");
+        AudioManager.instance.Play("Button");
+        if (!AudioManager.instance.isMainMusicRunning)
+        {
+            AudioManager.instance.Play("MainMusic");
+        }
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("IntroScene");
+        AudioManager.instance.Play("Button");
     }
 }
